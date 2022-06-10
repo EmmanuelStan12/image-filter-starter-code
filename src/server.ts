@@ -32,11 +32,9 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     let imageUrl: string = request.query["image_url"];
     try {
       let imagePath = await filterImageFromURL(imageUrl);
-      //console.log(imageUrl, imagePath)
       response.status(200).sendFile(imagePath);
       response.on('finish', () => {
         deleteLocalFiles([imagePath])
-        console.log("finished")
       })
     } catch (error) {
       response.status(400).send(error)
