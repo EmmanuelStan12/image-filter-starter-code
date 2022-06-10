@@ -31,15 +31,14 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   app.get('/filteredImage', async (request: Request, response: Response) => {
     let imageUrl: string = request.query["image_url"];
     try {
-      let imagePath = await filterImageFromURL(imageUrl);
+      let imagePath: string = await filterImageFromURL(imageUrl);
       response.status(200).sendFile(imagePath);
       response.on('finish', () => {
         deleteLocalFiles([imagePath])
       })
     } catch (error) {
-      response.status(400).send(error)
+      response.status(422).send(error)
     }
-    response.send(imageUrl);
   })
 
   //! END @TODO1
