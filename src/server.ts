@@ -30,14 +30,18 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
   app.get('/filteredImage', async (request: Request, response: Response) => {
     let imageUrl: string = request.query["image_url"];
-    try {
-      let imagePath: string = await filterImageFromURL(imageUrl);
-      response.status(200).sendFile(imagePath);
-      response.on('finish', () => {
-        deleteLocalFiles([imagePath])
-      })
-    } catch (error) {
-      response.status(422).send(error)
+    if (imageUrl) {
+      try {
+        let imagePath: string = await filterImageFromURL(imageUrl);
+        response.status(200).sendFile(imagePath);
+        response.on('finish', () => {
+          deleteLocalFiles([imagePath])
+        })
+      } catch (error) {
+        response.status(422).send(error)
+      } 
+    } else {
+      response.status(404).send("ImageUrl parameter is not valid, please specify the image url, i.e /filteredimage?image_url={{URL}}");
     }
   })
 
